@@ -16,12 +16,8 @@ export function activate(context: vscode.ExtensionContext) {
     "create-react-component-files.createFile",
     async (sender) => {
       try {
-        console.log(1, sender);
         if (!sender.path) return;
 
-        console.log(2);
-
-        console.log(3);
         // コンポーネント名を入力するダイアログを表示
         const componentName = await vscode.window.showInputBox({
           title: "コンポーネント名を入力してください",
@@ -31,11 +27,9 @@ export function activate(context: vscode.ExtensionContext) {
         if (componentName === undefined) {
           return;
         }
-        console.log(4);
 
         // vscode.;
         const newDir = vscode.Uri.joinPath(sender, componentName);
-        console.log(5, newDir.path);
 
         await vscode.workspace.fs.createDirectory(newDir);
 
@@ -43,21 +37,21 @@ export function activate(context: vscode.ExtensionContext) {
         const indexFileBlob: Uint8Array = Buffer.from(
           `export * from "./${componentName}.tsx";`
         );
-        const indexFileRes = await writeFileSync(indexFile.path, indexFileBlob);
+        await writeFileSync(indexFile.path, indexFileBlob);
 
         const componentFile = vscode.Uri.joinPath(
           newDir,
           `${componentName}.tsx`
         );
         const componentFileBlob: Uint8Array = Buffer.from(
-          `import { FC } from 'react';\n\nexport const ${componentName}: FC = () => {\n  return <></>;\n}`
+          `import { FC } from 'react';\n\nexport const ${componentName}: FC = () => {\n  return <></>;\n};\n`
         );
-        const componentFileRes = await writeFileSync(
-          componentFile.path,
-          componentFileBlob
-        );
+        await writeFileSync(componentFile.path, componentFileBlob);
 
-        console.log(6, indexFileRes, componentFileRes);
+        vscode.workspace.openTextDocument(componentFile).then((doc) => {
+          vscode.window.showTextDocument(doc);
+        });
+
         // 右下にメッセージを表示
         vscode.window.showInformationMessage(
           `Hello World from create-react-component-files! ${componentName}`
