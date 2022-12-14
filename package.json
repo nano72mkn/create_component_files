@@ -1,25 +1,39 @@
 {
-  "name": "create-component-files",
-  "displayName": "create_component_files",
+  "name": "create-react-component-files",
+  "displayName": "create_react_component_files",
   "description": "reactのコンポーネント作成に必要なファイルを生成します",
   "version": "0.0.1",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.74.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:shota1995m/create_component_files.git"
   },
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "onCommand:create-component-files.helloWorld"
+    "onCommand:create-react-component-files.createFile"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "create-component-files.helloWorld",
-        "title": "Hello World"
+        "command": "create-react-component-files.createFile",
+        "title": "Reactコンポーネントを作成する"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "create-react-component-files.createFile",
+          "title": "Reactコンポーネントを作成する",
+          "when": "explorerResourceIsFolder"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
