@@ -35,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         const indexFile = vscode.Uri.joinPath(newDir, "index.ts");
         const indexFileBlob: Uint8Array = Buffer.from(
-          `export * from "./${componentName}.tsx";`
+          `export * from "./${componentName}";`
         );
         await writeFileSync(indexFile.path, indexFileBlob);
 
