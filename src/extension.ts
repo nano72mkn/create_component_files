@@ -35,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         const indexFile = vscode.Uri.joinPath(newDir, "index.ts");
         const indexFileBlob: Uint8Array = Buffer.from(
-          `export * from "./${componentName}";`
+          `export * from './${componentName}';`
         );
         await writeFileSync(indexFile.path, indexFileBlob);
 
@@ -47,6 +47,15 @@ export function activate(context: vscode.ExtensionContext) {
           `import { FC } from 'react';\n\nexport const ${componentName}: FC = () => {\n  return <></>;\n};\n`
         );
         await writeFileSync(componentFile.path, componentFileBlob);
+
+        const storybookFile = vscode.Uri.joinPath(
+          newDir,
+          `${componentName}.stories.tsx`
+        );
+        const storybookFileBlob: Uint8Array = Buffer.from(
+          `import { ComponentMeta, ComponentStory } from '@storybook/react';\n\nimport { ${componentName} } from './index';\n\nexport default {\n  title: '${componentName}',\n  components: ${componentName},\n} as ComponentMeta<typeof ${componentName}>;\n\nconst Template: ComponentStory<typeof ${componentName}> = (args) => (\n  <${componentName} {...args} />\n);\n\nexport const Default = Template.bind({});`
+        );
+        await writeFileSync(storybookFile.path, storybookFileBlob);
 
         vscode.workspace.openTextDocument(componentFile).then((doc) => {
           vscode.window.showTextDocument(doc);
